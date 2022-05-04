@@ -9,12 +9,13 @@ import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
 
-    Fragment fragment0,fragment1,fragment2,fragment3;
+    Fragment start,fragment0,fragment1,fragment2,fragment3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        start= new start();
         fragment0 = new Fragment0();
         fragment1 = new Fragment1();
         fragment2 = new Fragment2();
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
                 int position = tab.getPosition();
 
-                Fragment selected = null;
+                Fragment selected = fragment0;
                 if(position == 0){
 
                     selected = fragment0;

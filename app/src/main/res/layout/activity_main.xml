@@ -5,12 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/tabs"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toTopOf="@id/Logo"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/Logo"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toTopOf="@id/tabs"
         tools:ignore="MissingConstraints" />
 
     <com.google.android.material.tabs.TabLayout
@@ -46,6 +51,16 @@
 
     </com.google.android.material.tabs.TabLayout>
 
+    <fragment
+
+        android:id="@+id/fragment_container_view_tag"
+        android:name="com.example.smail.start"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@+id/frame"
+        tools:layout_editor_absoluteX="0dp" />
+
     <FrameLayout
         android:id="@+id/frame"
         android:layout_width="match_parent"
@@ -58,15 +73,7 @@
 
     </FrameLayout>
 
-    <fragment
 
-        android:id="@+id/fragment_container_view_tag"
-        android:name="com.example.smail.Fragment0"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/frame"
-        tools:layout_editor_absoluteX="16dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,8 +13,9 @@
 
     <ImageView
         android:id="@+id/Logo"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="50dp"
+        android:background="@color/main_Yellow"
         app:layout_constraintBottom_toTopOf="@id/tabs"
         tools:ignore="MissingConstraints" />
 

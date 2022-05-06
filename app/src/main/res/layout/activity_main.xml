@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/up"
     tools:context=".MainActivity">
     <LinearLayout
         android:layout_width="wrap_content"
@@ -18,6 +19,7 @@
         android:background="@color/main_Yellow"
         app:layout_constraintBottom_toTopOf="@id/tabs"
         tools:ignore="MissingConstraints" />
+
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
@@ -74,7 +76,47 @@
 
     </FrameLayout>
 
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    app:layout_constraintBottom_toBottomOf="@id/up">
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp">
+
+        <Button
+            android:id="@+id/main"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+
+            android:text="main" />
+
+        <Button
+            android:id="@+id/calender"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="calender" />
+
+        <Button
+            android:id="@+id/camera"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="camera" />
+
+        <Button
+            android:id="@+id/mypage"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="mypage" />
 
 
+    </com.google.android.material.bottomappbar.BottomAppBar>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

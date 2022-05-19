@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.smail.GridListAdapter;
+import com.example.smail.ListItem;
 import com.example.smail.R;
 
 public class Fragment0 extends Fragment {

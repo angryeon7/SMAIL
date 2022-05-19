@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.smail.ListAdapter;
+import com.example.smail.Listitem_Person;
 import com.example.smail.R;
 
 public class Fragment1 extends Fragment {

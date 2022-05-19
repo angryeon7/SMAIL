@@ -11,16 +11,19 @@
         <entry key="..\:/Users/kim hyun ok/AndroidStudioProjects/SMAIL/app/src/main/res/layout/fragment3.xml" value="0.38645833333333335" />
         <entry key="..\:/Users/kim hyun ok/AndroidStudioProjects/SMAIL/app/src/main/res/layout/fragment_item.xml" value="0.24094202898550723" />
         <entry key="..\:/Users/kim hyun ok/AndroidStudioProjects/SMAIL/app/src/main/res/layout/fragment_item_list.xml" value="0.24094202898550723" />
+        <entry key="..\:/Users/kim hyun ok/AndroidStudioProjects/SMAIL/app/src/main/res/layout/home.xml" value="0.23369565217391305" />
         <entry key="..\:/Users/kim hyun ok/AndroidStudioProjects/SMAIL/app/src/main/res/layout/layout.xml" value="0.38645833333333335" />
         <entry key="..\:/Users/kim hyun ok/AndroidStudioProjects/SMAIL/app/src/main/res/layout/list_item.xml" value="0.2563405797101449" />
         <entry key="..\:/Users/kim hyun ok/AndroidStudioProjects/SMAIL/app/src/main/res/layout/list_item_person.xml" value="0.1762917933130699" />
         <entry key="..\:/Users/kim hyun ok/AndroidStudioProjects/SMAIL/app/src/main/res/layout/start.xml" value="0.17223910840932116" />
         <entry key="..\:/Users/kim hyun ok/AndroidStudioProjects/SMAIL/app/src/main/res/menu/bottom_app_bar.xml" value="0.16197916666666667" />
         <entry key="..\:/Users/kim hyun ok/AndroidStudioProjects/SMAIL/app/src/main/res/menu/menu.xml" value="0.20104166666666667" />
+        <entry key="..\:/Users/kim hyun ok/AndroidStudioProjects/SMAIL/app/src/main/res/menu/menu_bottom.xml" value="0.3441025641025641" />
+        <entry key="..\:/Users/kim hyun ok/AndroidStudioProjects/SMAIL/app/src/main/res/xml/root_preferences.xml" value="0.33" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

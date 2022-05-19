@@ -1,89 +1,82 @@
 package com.example.smail;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.SearchView;
+import android.widget.Toast;
 
-import com.google.android.material.tabs.TabLayout;
+import com.example.smail.tabFragment.CameraTab;
+import com.example.smail.tabFragment.ViewPagerAdapter;
+import com.example.smail.tabFragment.calender;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    Fragment start,fragment0,fragment1,fragment2,fragment3;
-    Button button1,button2,button3,button4;
+    private ViewPager viewPager;
+    private BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        start= new start();
-        fragment0 = new Fragment0();
-        fragment1 = new Fragment1();
-        fragment2 = new Fragment2();
-        fragment3 = new Fragment3();
-        button1 = (Button) findViewById(R.id.main);
-        button2 = (Button) findViewById(R.id.calender);
-        button3 = (Button) findViewById(R.id.camera);
-        button4 = (Button) findViewById(R.id.mypage);
+        viewPager = findViewById(R.id.container);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
 
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_SET_USER_VISIBLE_HINT);
+        viewPager.setAdapter(adapter);
 
-        getSupportFragmentManager().beginTransaction().add(R.id.frame, fragment0).commit();
-
-        TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
-
-        button2.setOnClickListener(new Button.OnClickListener(){
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onClick(View v){
-                Intent intent = new Intent(MainActivity.this, calender.class);
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                startActivity(intent);
             }
 
-        });
-        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-
-                int position = tab.getPosition();
-
-                Fragment selected = fragment0;
-                if(position == 0){
-
-                    selected = fragment0;
-
-                }else if (position == 1){
-
-                    selected = fragment1;
-
-                }else if (position == 2){
-
-                    selected = fragment2;
-
-                }else if (position == 3){
-
-                    selected = fragment3;
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        bottomNavigationView.getMenu().findItem(R.id.tab1).setChecked(true);
+                        break;
+                    case 1:
+                        bottomNavigationView.getMenu().findItem(R.id.tab2).setChecked(true);
+                        break;
+                    case 2:
+                        bottomNavigationView.getMenu().findItem(R.id.tab3).setChecked(true);
+                        break;
                 }
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame, selected).commit();
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+            public void onPageScrollStateChanged(int state) {
 
             }
+        });
 
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.tab1:
+                        viewPager.setCurrentItem(0);
+                        break;
 
+                    case R.id.tab2:
+                        viewPager.setCurrentItem(1);
+                        break;
+
+                    case R.id.tab3:
+                        viewPager.setCurrentItem(2);
+                        break;
+                }
+                return true;
             }
         });
     }
-
-
 }

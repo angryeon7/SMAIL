@@ -1,4 +1,4 @@
-package com.example.smail;
+package com.example.smail.Home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.example.smail.R;
 
 public class Fragment3 extends Fragment {
     @Nullable

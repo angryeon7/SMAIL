@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:id="@+id/up"
     tools:context=".MainActivity">
+
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="50dp"
@@ -16,7 +18,7 @@
         android:id="@+id/Logo"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:background="@color/main_Yellow"
+        android:src="@drawable/img"
         app:layout_constraintBottom_toTopOf="@id/tabs"
         tools:ignore="MissingConstraints" />
 

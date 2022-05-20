@@ -7,8 +7,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class recognizedWord {
 
-    @SerializedName("result")
-    @Expose
     private List<Result> result = null;
 
     public List<Result> getResult() {

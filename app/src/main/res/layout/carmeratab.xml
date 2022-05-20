@@ -5,16 +5,36 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
+
+
     <ImageView android:id="@+id/iv_photo"
         android:layout_width="match_parent"
-        android:layout_height="550dp" />
+        android:layout_height="300dp" />
+    <ScrollView
+        android:scrollbars="vertical"
+        android:id="@+id/text_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="250dp">
+
+        <TextView
+            android:id="@+id/ocr_text"
+            android:textSize="15pt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </ScrollView>
+    <Button
+        android:id="@+id/cameraButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="카메라"/>
 
     <Button
         android:id="@+id/btn_photo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:background="#708090"
-        android:text="사진찍기" />
+        android:text="불러오기" />
 
 </LinearLayout>
 

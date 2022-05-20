@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import androidx.loader.content.CursorLoader;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import okhttp3.MediaType;
@@ -32,24 +33,40 @@ import retrofit2.Response;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 import android.app.Activity.*;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+
+import org.json.JSONObject;
 
 public class CameraFragment extends Fragment {
+    ImageView imageView;
+    TextView textView;
 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.carmeratab,container,false);
 
 
+
         Button bt_photo=view.findViewById(R.id.btn_photo);
         bt_photo.setOnClickListener(photoClick);
 
+        imageView = (ImageView) view.findViewById(R.id.iv_photo);
 
+        textView = (TextView) view.findViewById(R.id.ocr_text);
 
         return view;
     }
     View.OnClickListener photoClick = new View.OnClickListener(){
         @Override
         public void onClick(View view) {
-
             selectImage();
 
         }
@@ -65,12 +82,16 @@ public class CameraFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode,Intent intent){
 
 
+
         switch(requestCode){
             case 100:
                 if(resultCode == RESULT_OK){
                     Uri fileUrl = intent.getData();
                     if(fileUrl != null){
                         uploadFile(fileUrl);
+
+                        imageView.setImageURI(fileUrl);
+
                     }
                 }
                 break;
@@ -82,23 +103,42 @@ public class CameraFragment extends Fragment {
         KakaoClient kakaoClient = KakaoClient.getInstance();
         KakaoPhotoInterface kakaoPhotoInterface = KakaoClient.getRetrofitInterface();
 
-        String filePath = "/sdcard/DCIM/Camera/20220422_192100.jpg";
+
+        String filePath = "/storage/emulated/0/DCIM/letter_1.jpg_resized.jpg";
 
         if(filePath !=null && !filePath.isEmpty()){
             File file = new File(filePath);
             if(file.exists()){
                 RequestBody requestFile = RequestBody.create(MediaType.parse("form-data"),file);
                 MultipartBody.Part body = MultipartBody.Part.createFormData("image",file.getName(),requestFile);
-                kakaoPhotoInterface.getPhotoFileResult(body).enqueue(new Callback<KakaoResult>(){
+                kakaoPhotoInterface.getPhotoFileResult(body).enqueue(new Callback<JsonObject>(){
                     @Override
-                    public void onResponse(Call<KakaoResult> call, Response<KakaoResult> response){
-                        KakaoResult result = response.body();
-                        List<KakaoPhotoResult> kakaoPhotoResult = result.getKakaoPhotoResult();
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response){
+
+                        System.out.println(response.body().toString());
+
+                        Gson gson = new Gson();
+                        recognizedWord RecognizeWord = gson.fromJson( response.body(),recognizedWord.class);
+                        List<Result> word = RecognizeWord.getResult();
+                        String textResult="";
+                        String e;
+                        for(int i = 0;i<word.size();i++){
+                            List<String> eu = word.get(i).getRecognitionWords();
+                            for(int j=0;j<eu.size();j++){
+                                textResult+=eu.get(j)+"\n";
+                            }
+
+                        }
+                        textView.setText(textResult);
+                        System.out.print(textResult);
+
+                        int i = textResult.indexOf("아");
+                        System.out.println(i);
 
                         Log.d("kakao","Kata fetch success");
                     }
                     @Override
-                    public void onFailure(Call<KakaoResult> call, Throwable t){
+                    public void onFailure(Call<JsonObject> call, Throwable t){
                         Log.d("retrofit",t.getMessage());
                     }
                 });

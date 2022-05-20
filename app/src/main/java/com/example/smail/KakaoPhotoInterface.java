@@ -1,6 +1,7 @@
 package com.example.smail;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import okhttp3.*;
 import retrofit2.*;
@@ -14,6 +15,6 @@ public interface KakaoPhotoInterface {
     @Multipart
     @Headers({"Authorization: KakaoAK b6d7e6cd29a02e36eaa0089b4b3e85e1"})
     @POST("/v2/vision/text/ocr ")
-    Call<KakaoResult> getPhotoFileResult(@Part MultipartBody.Part file);
+    Call<JsonObject> getPhotoFileResult(@Part MultipartBody.Part file);
 
 }

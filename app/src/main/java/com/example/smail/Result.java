@@ -6,12 +6,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class Result {
 
-    @SerializedName("boxes")
-    @Expose
+
     private List<List<Integer>> boxes = null;
-    @SerializedName("recognition_words")
-    @Expose
-    private List<String> recognitionWords = null;
+    private List<String> recognition_words = null;
 
     public List<List<Integer>> getBoxes() {
         return boxes;
@@ -22,11 +19,11 @@ public class Result {
     }
 
     public List<String> getRecognitionWords() {
-        return recognitionWords;
+        return recognition_words;
     }
 
     public void setRecognitionWords(List<String> recognitionWords) {
-        this.recognitionWords = recognitionWords;
+        this.recognition_words = recognitionWords;
     }
 
 }

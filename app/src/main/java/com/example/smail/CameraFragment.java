@@ -2,27 +2,43 @@ package com.example.smail;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.loader.content.CursorLoader;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
-import java.lang.reflect.Type;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -30,37 +46,51 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Query;
-import retrofit2.http.Url;
-import android.app.Activity.*;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
 
-import org.json.JSONObject;
 
+import static android.os.Environment.DIRECTORY_PICTURES;
 public class CameraFragment extends Fragment {
+    View view;
+
+    final private static String TAG = "GILBOMI";
+    Button cameraButton;
+    final static int TAKE_PICTURE = 1;
+    String mCurrentPhotoPath;
+    final static int REQUEST_TAKE_PHOTO = 1;
+
+
     ImageView imageView;
     TextView textView;
 
+    @Nullable
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.carmeratab,container,false);
 
-
-
         Button bt_photo=view.findViewById(R.id.btn_photo);
+        Button cameraButton=view.findViewById(R.id.cameraButton);
         bt_photo.setOnClickListener(photoClick);
+        cameraButton.setOnClickListener(cameraClick);
 
         imageView = (ImageView) view.findViewById(R.id.iv_photo);
 
         textView = (TextView) view.findViewById(R.id.ocr_text);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(getActivity().checkSelfPermission(Manifest.permission.CAMERA) ==
+                    PackageManager.PERMISSION_GRANTED &&
+                    getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "권한 설정 완료"); } else { Log.d(TAG, "권한 설정 요청");
+                ActivityCompat.requestPermissions(getActivity(), new String[]{
+                        Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            }
+        }
 
         return view;
     }
@@ -72,6 +102,19 @@ public class CameraFragment extends Fragment {
         }
     };
 
+    View.OnClickListener cameraClick = new View.OnClickListener(){
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.cameraButton:
+                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, TAKE_PICTURE); break;
+            }
+
+        }
+    };
+
+
     private void selectImage(){
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
@@ -80,8 +123,6 @@ public class CameraFragment extends Fragment {
     }
 
     public void onActivityResult(int requestCode, int resultCode,Intent intent){
-
-
 
         switch(requestCode){
             case 100:
@@ -95,6 +136,13 @@ public class CameraFragment extends Fragment {
                     }
                 }
                 break;
+            case TAKE_PICTURE:
+                if (resultCode == RESULT_OK && intent.hasExtra("data")) {
+                    Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
+                    if (bitmap != null) {
+                        imageView.setImageBitmap(bitmap);
+                    }
+                } break;
         }
         super.onActivityResult(requestCode,resultCode,intent);
     }
@@ -125,6 +173,7 @@ public class CameraFragment extends Fragment {
                         for(int i = 0;i<word.size();i++){
                             List<String> eu = word.get(i).getRecognitionWords();
                             for(int j=0;j<eu.size();j++){
+                                //결과
                                 textResult+=eu.get(j)+"\n";
                             }
 

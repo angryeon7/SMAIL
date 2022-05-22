@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+
+import com.example.smail.CameraFragment;
 import com.example.smail.HomeTab;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
@@ -20,7 +22,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             case 1:
                 return new calender();
             case 2:
-                return new CameraTab();
+                return new CameraFragment();
             default:
                 return new HomeTab();
         }

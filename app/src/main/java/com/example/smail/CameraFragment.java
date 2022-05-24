@@ -64,7 +64,6 @@ public class CameraFragment extends Fragment {
     String mCurrentPhotoPath;
     final static int REQUEST_TAKE_PHOTO = 1;
 
-
     ImageView imageView;
     TextView textView;
 
@@ -152,7 +151,7 @@ public class CameraFragment extends Fragment {
         KakaoPhotoInterface kakaoPhotoInterface = KakaoClient.getRetrofitInterface();
 
 
-        String filePath = "/storage/emulated/0/DCIM/letter_1.jpg_resized.jpg";
+        String filePath = "/sdcard/DCIM/Camera/20220512_210243.jpg";
 
         if(filePath !=null && !filePath.isEmpty()){
             File file = new File(filePath);

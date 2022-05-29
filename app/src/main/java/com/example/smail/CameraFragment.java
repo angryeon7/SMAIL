@@ -132,20 +132,35 @@ public class CameraFragment extends Fragment {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.cameraButton:
-                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    try {
-                        File photoFIle = createImageFile();//파일 저장하기 함수 호출
-                        uri = Uri.fromFile(photoFIle);//저장한 파일에서 uri 가져오기
-
-                    } catch (IOException e) {
-
-                    }
-                    startActivityForResult(cameraIntent, TAKE_PICTURE); break;
+                    dispatchTakePictureIntent();//바로 하단에 있는 함수로 카메라 버튼 클릭 시 함수
+                    break;
             }
 
         }
     };
 
+
+    private void dispatchTakePictureIntent() {//카메라 버튼 클릭 시 함수로 카메라로 intent 해서 이미지 생성하고 uri 받아오는 함수
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                uri = FileProvider.getUriForFile(getActivity(),
+                        "com.example.smail",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(takePictureIntent,TAKE_PICTURE);
+            }
+        }
+    }
 
     private void selectImage(){//갤러리 불러오기
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -169,13 +184,53 @@ public class CameraFragment extends Fragment {
                 }
                 break;
             case TAKE_PICTURE://카메라
-                if (resultCode == RESULT_OK && intent.hasExtra("data")) {
-                    Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
-                    Uri fileUrl = getImageUri(getActivity(),bitmap);
-                    if (bitmap != null) {
-                        imageView.setImageBitmap(bitmap);
+                if (resultCode == RESULT_OK ) {
+                    File file = new File(mCurrentPhotoPath);
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media
+                                .getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (bitmap != null) {//이미지가 회전되어 있어서 이를 바로 잡기 위한 if문
+                        ExifInterface ei = null;
+                        try {
+                            ei = new ExifInterface(mCurrentPhotoPath);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                                ExifInterface.ORIENTATION_UNDEFINED);
 
-                        uploadFile(fileUrl);
+                        Bitmap rotatedBitmap = null;
+                        System.out.println(orientation);
+                        switch(orientation) {
+                            case ExifInterface.ORIENTATION_ROTATE_90://90도 회전
+                                rotatedBitmap = rotateImage(bitmap, 90);
+
+                                break;
+
+                            case ExifInterface.ORIENTATION_ROTATE_180://180도 회전
+                                rotatedBitmap = rotateImage(bitmap, 180);
+                                break;
+
+                            case ExifInterface.ORIENTATION_ROTATE_270://270도 회전
+                                rotatedBitmap = rotateImage(bitmap, 270);
+                                break;
+
+                            case ExifInterface.ORIENTATION_NORMAL:
+                            default:
+                                rotatedBitmap = bitmap;
+                        }
+                        imageView.setImageBitmap(rotatedBitmap);
+
+                    }
+
+                   // Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
+                   // Uri fileUrl = getImageUri(getActivity(),bitmap);
+                    if (bitmap != null) {
+                        uploadFile(uri);
 
                     }
                 } break;
@@ -235,7 +290,7 @@ public class CameraFragment extends Fragment {
                             Date date = new Date();
                             String date_ = format1.format(date);
                             today_date.setText(date_);
-                            if (textResult.contains(("씀")) == true) {
+                            if (textResult.contains(("씀")) == true) {//발신자 가져오기
                                 int j = textResult.indexOf("씀");
                                 writer = textResult.substring(j - 4, j - 1);
                             } else if (textResult.contains(("올림")) == true) {
@@ -261,8 +316,15 @@ public class CameraFragment extends Fragment {
 
 
     }
+    public static Bitmap rotateImage(Bitmap source, float angle) {//카메라로 찍으면 90도 회전되어 있어서 사진 돌리는 함수
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
 
-    private Uri getImageUri(Context context, Bitmap inImage) {
+
+    private Uri getImageUri(Context context, Bitmap inImage) {//비트맵 이미지에서 uri받아오는 함수, 현재 안쓸 것 같음
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "Title", null);
@@ -331,6 +393,7 @@ public class CameraFragment extends Fragment {
                 StorageDir
         );
 
+        mCurrentPhotoPath=image.getAbsolutePath();
         return image;
     }
 

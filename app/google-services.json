@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "578811293610",
+    "firebase_url": "https://smail-9d391-default-rtdb.firebaseio.com",
+    "project_id": "smail-9d391",
+    "storage_bucket": "smail-9d391.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578811293610:android:ed877a44ca38ac59cc05d3",
+        "android_client_info": {
+          "package_name": "com.example.smail"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "578811293610-m93s0g43vkaghafh2qo2m6mi9jpm7hfm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIE5_W6wOmg-cKPVcehbmHOwV8vYDXYu0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "578811293610-m93s0g43vkaghafh2qo2m6mi9jpm7hfm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

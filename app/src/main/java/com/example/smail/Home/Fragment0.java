@@ -31,15 +31,14 @@ public class Fragment0 extends Fragment {
         gridview = (GridView) view.findViewById(R.id.gridView);
         GridListAdapter adapter = new GridListAdapter();
 
-        adapter.addItem(new ListItem(R.drawable.ic_launcher_foreground,"김일이","생일 축하해","2022.02.04"));
-        adapter.addItem(new ListItem(R.drawable.ic_launcher_foreground,"김삼사","결혼 기념일","2022.03.02"));
+       /* adapter.addItem(new ListItem(R.drawable.ic_launcher_foreground,"김삼사","결혼 기념일","2022.03.02"));
         adapter.addItem(new ListItem(R.drawable.ic_launcher_foreground,"이사오","스승의 날","2022.05.15."));
         adapter.addItem(new ListItem(R.drawable.ic_launcher_foreground,"김일이","생일 축하해","2022.02.04"));
         adapter.addItem(new ListItem(R.drawable.ic_launcher_foreground,"김삼사","결혼 기념일","2022.03.02"));
         adapter.addItem(new ListItem(R.drawable.ic_launcher_foreground,"이사오","스승의 날","2022.05.15."));
         adapter.addItem(new ListItem(R.drawable.ic_launcher_foreground,"김일이","생일 축하해","2022.02.04"));
         adapter.addItem(new ListItem(R.drawable.ic_launcher_foreground,"김삼사","결혼 기념일","2022.03.02"));
-        adapter.addItem(new ListItem(R.drawable.ic_launcher_foreground,"이사오","스승의 날","2022.05.15."));
+        adapter.addItem(new ListItem(R.drawable.ic_launcher_foreground,"이사오","스승의 날","2022.05.15."));*/
         gridview.setAdapter(adapter);
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {

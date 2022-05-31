@@ -5,6 +5,35 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:src="@drawable/img"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <Button
+        android:id="@+id/cameraButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+            android:background="@android:drawable/ic_menu_camera" />
+
+        <Button
+            android:id="@+id/btn_photo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@android:drawable/ic_menu_gallery"
+            android:gravity="center" />
+
+    </LinearLayout>
+
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -19,27 +48,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-        <ImageView
+
+            <ImageView
         android:id="@+id/iv_photo"
         android:layout_width="match_parent"
+            android:src="@android:drawable/ic_menu_upload"
         android:layout_height="286dp" />
-        <TextView
+
+            <EditText
             android:id="@+id/ocr_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
+                android:text="본문"
+                android:background="@null"
             android:textSize="15pt" />
-    <Button
-        android:id="@+id/cameraButton"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="카메라"/>
+            <EditText
+                android:id="@+id/today_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="8pt"
+                android:text="날짜:"
+                android:background="@null"
+                android:textAlignment="textEnd"/>
+            <EditText
+                android:id="@+id/writer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="8pt"
+                android:background="@null"
+                android:textAlignment="textEnd"
+                android:text="발신자:"/>
 
-    <Button
-        android:id="@+id/btn_photo"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#708090"
-        android:text="불러오기" />
         </LinearLayout>
     </ScrollView>
     <LinearLayout
@@ -49,6 +88,7 @@
         android:layout_gravity="bottom">
 
         <Button
+            android:id="@+id/save_Btn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

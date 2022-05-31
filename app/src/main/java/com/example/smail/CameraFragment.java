@@ -30,6 +30,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.loader.content.CursorLoader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -58,12 +59,23 @@ import retrofit2.Response;
 
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
 
 import static android.os.Environment.DIRECTORY_PICTURES;
 import static android.os.Environment.getExternalStorageDirectory;
@@ -88,18 +100,25 @@ public class CameraFragment extends Fragment {
     EditText today_date;//오늘 날짜
     EditText writer_;//writer 인식하고 default 발신자
     Uri uri;
+    private String imageUrl="";
 
-
+    private FirebaseStorage storage;
+    private FirebaseDatabase database;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.carmeratab,container,false);
 
+        storage = FirebaseStorage.getInstance();
+        database = FirebaseDatabase.getInstance();
+
         OpenCVLoader openCVLoader;
         Button bt_photo=view.findViewById(R.id.btn_photo);
         Button cameraButton=view.findViewById(R.id.cameraButton);
+        Button bt_save =view.findViewById(R.id.save_Btn);
         bt_photo.setOnClickListener(photoClick);
         cameraButton.setOnClickListener(cameraClick);
+        bt_save.setOnClickListener(saveClick);
 
         imageView = (ImageView) view.findViewById(R.id.iv_photo);
 
@@ -127,6 +146,14 @@ public class CameraFragment extends Fragment {
         }
     };
 
+    View.OnClickListener saveClick = new View.OnClickListener(){
+        @Override
+        public void onClick(View view) {
+                uploadImg(imageUrl);
+
+        }
+    };
+
     View.OnClickListener cameraClick = new View.OnClickListener(){//카메라 연결 버튼
         @Override
         public void onClick(View view) {
@@ -138,6 +165,85 @@ public class CameraFragment extends Fragment {
 
         }
     };
+
+    private void uploadImg(String uri)
+    {
+        try {
+            // Create a storage reference from our app
+            StorageReference storageRef = storage.getReference();
+
+            Uri file = Uri.fromFile(new File(uri));
+            System.out.println(file + "하하하하");
+
+            final StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
+            UploadTask uploadTask = riversRef.putFile(file);
+
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
+
+                    // Continue with the task to get the download URL
+                    return riversRef.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful())
+                    {
+                        Toast.makeText(getActivity(), "업로드 성공", Toast.LENGTH_SHORT).show();
+
+                        //파이어베이스에 데이터베이스 업로드
+                        @SuppressWarnings("VisibleForTests")
+                        Uri downloadUrl = task.getResult();
+
+                        Model model = new Model();
+                        model.imageUrl = downloadUrl.toString();
+                       // model.setImageUrl(downloadUrl.toString());
+                        model.description = textView.getText().toString();
+                        model.date = today_date.getText().toString();
+                        model.sender = writer_.getText().toString();
+                       // model.setTitle(etTitle.getText().toString());
+                       // model.setDescription(etDesc.getText().toString());
+                        //model.setUid(mAuth.getCurrentUser().getUid());
+                        //model.setUserId(mAuth.getCurrentUser().getEmail());
+
+                        //image 라는 테이블에 json 형태로 담긴다.
+                        //database.getReference().child("Profile").setValue(imageDTO);
+                        //  .push()  :  데이터가 쌓인다.
+                        database.getReference().child("Profile").push().setValue(model);
+
+                        //Intent intent = new Intent(getActivity().getApplicationContext(), CameraFragment.class);
+                        //startActivity(intent);
+
+                    } else {
+                        // Handle failures
+                        // ...
+                    }
+                }
+            });
+
+        } catch (NullPointerException e)
+        {
+            Toast.makeText(getActivity(), "이미지 선택 안함", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String getRealPathFromUri(Uri uri)
+    {
+        String[] proj=  {MediaStore.Images.Media.DATA};
+        CursorLoader cursorLoader = new CursorLoader(getContext(),uri,proj,null,null,null);
+        Cursor cursor = cursorLoader.loadInBackground();
+
+        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String url = cursor.getString(columnIndex);
+        cursor.close();
+        return  url;
+    }
+
 
 
     private void dispatchTakePictureIntent() {//카메라 버튼 클릭 시 함수로 카메라로 intent 해서 이미지 생성하고 uri 받아오는 함수
@@ -175,6 +281,7 @@ public class CameraFragment extends Fragment {
             case 100://갤러리
                 if(resultCode == RESULT_OK){
                     Uri fileUrl = intent.getData();
+                    imageUrl = getRealPathFromURI(getActivity(),intent.getData());
                     if(fileUrl != null){
                         uploadFile(fileUrl);
 
@@ -186,6 +293,7 @@ public class CameraFragment extends Fragment {
             case TAKE_PICTURE://카메라
                 if (resultCode == RESULT_OK ) {
                     File file = new File(mCurrentPhotoPath);
+
                     Bitmap bitmap = null;
                     try {
                         bitmap = MediaStore.Images.Media
@@ -231,7 +339,7 @@ public class CameraFragment extends Fragment {
                    // Uri fileUrl = getImageUri(getActivity(),bitmap);
                     if (bitmap != null) {
                         uploadFile(uri);
-
+                        imageUrl = getRealPathFromURI(getActivity(),uri);
                     }
                 } break;
         }

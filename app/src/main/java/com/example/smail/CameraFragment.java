@@ -377,6 +377,21 @@ public class CameraFragment extends Fragment {
         Imgproc.dilate(temp,conclusion,Imgproc.getStructuringElement(Imgproc.MORPH_RECT,size));
         Imgproc.threshold(conclusion,conclusion,127,255,Imgproc.THRESH_BINARY);
 
+        Imgproc.cvtColor(src, src, Imgproc.COLOR_RGBA2GRAY);
+        Imgproc.adaptiveThreshold(src, src, 255,
+                Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, 11, 2);
+        Imgproc.medianBlur(src, conclusion, 7);
+        /*
+        Imgproc.cvtColor(src, conclusion, Imgproc.COLOR_RGBA2GRAY);
+        Imgproc.GaussianBlur(conclusion,conclusion,size,0f);
+        Imgproc.threshold(conclusion,conclusion,125,255,Imgproc.THRESH_BINARY_INV);
+        Mat morphingMatrix = Mat.ones(3,3,0);
+        Imgproc.morphologyEx(conclusion,conclusion,Imgproc.MORPH_OPEN,morphingMatrix);
+
+*/
+        //Imgproc.erode(src,temp, Imgproc.getStructuringElement(Imgproc.MORPH_RECT,size));
+        //Imgproc.bilateralFilter(temp,temp,);
+        //  Imgproc.dilate(temp,conclusion,Imgproc.getStructuringElement(Imgproc.MORPH_RECT,size));
         Utils.matToBitmap(conclusion,bitmap);
         return bitmap;
 

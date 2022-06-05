@@ -35,6 +35,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".mailDetail"></activity>
+        <activity android:name=".SearchTab"></activity>
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false"/>

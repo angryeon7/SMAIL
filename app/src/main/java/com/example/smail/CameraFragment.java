@@ -14,6 +14,7 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.media.Session2Command;
 import android.net.Uri;
+import android.net.http.SslCertificate;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -42,6 +43,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.sql.SQLSyntaxErrorException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -82,6 +84,7 @@ import static android.os.Environment.getExternalStorageDirectory;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.android.OpenCVLoader;
@@ -96,11 +99,13 @@ public class CameraFragment extends Fragment {
     final static int REQUEST_TAKE_PHOTO = 1;
 
     ImageView imageView;//선택된 사진이 들어갈 뷰
+    ImageView opencv_;//opencv test
     EditText textView;// 인식된 본문
     EditText today_date;//오늘 날짜
     EditText writer_;//writer 인식하고 default 발신자
     Uri uri;
     private String imageUrl="";
+    double rotate_=0f;
 
     private FirebaseStorage storage;
     private FirebaseDatabase database;
@@ -125,6 +130,8 @@ public class CameraFragment extends Fragment {
         textView = (EditText) view.findViewById(R.id.ocr_text);
         today_date = (EditText) view.findViewById(R.id.today_date);
         writer_ = (EditText) view.findViewById(R.id.writer);
+        opencv_=(ImageView) view.findViewById(R.id.opencv_);
+
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if(getActivity().checkSelfPermission(Manifest.permission.CAMERA) ==
@@ -358,7 +365,7 @@ public class CameraFragment extends Fragment {
         System.out.println(filePath);
         if(filePath !=null && !filePath.isEmpty()){
             File file = new File(filePath);
-            //SaveBitmapToFileCache(erode_cv(file),filePath);
+
             //전처리 함수
 
             System.out.println(file.exists()+"file.exists");
@@ -370,12 +377,56 @@ public class CameraFragment extends Fragment {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response){//kakao api 호출 받은 값 처리
 
-                        //System.out.println(response.body().toString());
+                        System.out.println(response.body().toString());
 
                         try {
                             Gson gson = new Gson();
                             recognizedWord RecognizeWord = gson.fromJson(response.body(), recognizedWord.class);
                             List<Result> word = RecognizeWord.getResult();
+                            float rot = (word.get(0).getBoxes().get(0).get(1)-word.get(0).getBoxes().get(1).get(1));
+                            float ttt = (word.get(0).getBoxes().get(0).get(0)-word.get(0).getBoxes().get(1).get(0));
+                            System.out.println(rot/ttt);
+                            rotate_=(Math.atan2(rot,ttt))*180/Math.PI-180;
+                            System.out.println(rotate_+"djWWWJfkkrh");
+                            SaveBitmapToFileCache(erode_cv(file),filePath);
+                            uploadFile_final(file);
+
+                        }catch (NullPointerException e){
+                            textView.setText("인식불가");
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t){
+                        Log.d("retrofit",t.getMessage());
+                    }
+                });
+            }
+        }
+
+
+    }
+
+
+
+    private void uploadFile_final(File file){//kakao api 불러오는 함수
+        KakaoClient kakaoClient = KakaoClient.getInstance();
+        KakaoPhotoInterface kakaoPhotoInterface = KakaoClient.getRetrofitInterface();
+
+            if(file.exists()){
+                RequestBody requestFile = RequestBody.create(MediaType.parse("form-data"),file);
+                MultipartBody.Part body = MultipartBody.Part.createFormData("image",file.getName(),requestFile);
+                kakaoPhotoInterface.getPhotoFileResult(body).enqueue(new Callback<JsonObject>(){
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response){//kakao api 호출 받은 값 처리
+
+                        System.out.println(response.body().toString());
+
+                        try {
+                            Gson gson = new Gson();
+                            recognizedWord RecognizeWord = gson.fromJson(response.body(), recognizedWord.class);
+                            List<Result> word = RecognizeWord.getResult();
+
+
                             String textResult = "";
                             String writer;
                             String e;
@@ -390,8 +441,8 @@ public class CameraFragment extends Fragment {
                             if(textResult==""){
                                 textView.setText("인식불가");
                             }else{
-                            textView.setText(textResult);
-                            System.out.print(textResult);
+                                textView.setText(textResult);
+                                System.out.print(textResult);
                             }
 
                             SimpleDateFormat format1 = new SimpleDateFormat("yyyy년 MM월 dd일");
@@ -420,7 +471,7 @@ public class CameraFragment extends Fragment {
                     }
                 });
             }
-        }
+
 
 
     }
@@ -473,20 +524,80 @@ public class CameraFragment extends Fragment {
 
     public Bitmap erode_cv(File file){//이미지 전처리
 
+        int Limit=1024;
         OpenCVLoader.initDebug();
         Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+        ExifInterface ei = null;
+        try {
+            ei = new ExifInterface(file.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED);
+
+        Bitmap rotatedBitmap = null;
+        System.out.println(orientation);
+        switch(orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90://90도 회전
+                rotatedBitmap = rotateImage(bitmap, 90);
+
+                break;
+
+            case ExifInterface.ORIENTATION_ROTATE_180://180도 회전
+                rotatedBitmap = rotateImage(bitmap, 180);
+                break;
+
+            case ExifInterface.ORIENTATION_ROTATE_270://270도 회전
+                rotatedBitmap = rotateImage(bitmap, 270);
+                break;
+
+            case ExifInterface.ORIENTATION_NORMAL:
+            default:
+                rotatedBitmap = bitmap;
+        }
         Mat src = new Mat();
-        Utils.bitmapToMat(bitmap,src);
+        Utils.bitmapToMat(rotatedBitmap,src);
         Mat temp = new Mat();
         Mat conclusion = new Mat();
-        org.opencv.core.Size size=new Size(3,3);
-        Imgproc.GaussianBlur(src,src,size,1f);
+        org.opencv.core.Size size=new Size(src.width(),src.height());
+        float ratio= (float) Limit/Math.max(src.height(),src.width());
+        System.out.println(src.height());
+        System.out.println(src.width());
+        Point point = new Point(src.size().width/2.0,src.size().height/2.0);
+        Imgproc.resize(src,temp,size,ratio,ratio);
+        Mat rotationMat = Imgproc.getRotationMatrix2D(point,rotate_,1.0);
+        org.opencv.core.Size size2=new Size(3,3);
+        Imgproc.warpAffine(temp, temp, rotationMat, new Size(0.0,0.0));
+
+
+        /*Imgproc.GaussianBlur(src,src,size,1f);
         Imgproc.erode(src,temp, Imgproc.getStructuringElement(Imgproc.MORPH_RECT,size));
         Imgproc.dilate(temp,conclusion,Imgproc.getStructuringElement(Imgproc.MORPH_RECT,size));
         Imgproc.threshold(conclusion,conclusion,127,255,Imgproc.THRESH_BINARY);
 
-        Utils.matToBitmap(conclusion,bitmap);
-        return bitmap;
+        Imgproc.cvtColor(src, src, Imgproc.COLOR_RGBA2GRAY);
+        Imgproc.adaptiveThreshold(src, src, 255,
+                Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, 11, 2);
+        Imgproc.medianBlur(src, conclusion, 7);*/
+
+
+        Imgproc.cvtColor(temp, conclusion, Imgproc.COLOR_RGBA2GRAY);
+        Imgproc.threshold(conclusion,conclusion,160,255,Imgproc.THRESH_BINARY_INV);
+        Imgproc.GaussianBlur(conclusion,conclusion,size2,0f);
+
+
+
+
+        //Imgproc.erode(src,temp, Imgproc.getStructuringElement(Imgproc.MORPH_RECT,size));
+        //Imgproc.bilateralFilter(temp,temp,);
+        //  Imgproc.dilate(temp,conclusion,Imgproc.getStructuringElement(Imgproc.MORPH_RECT,size));
+
+        Utils.matToBitmap(conclusion,rotatedBitmap);
+
+        opencv_.setImageBitmap(rotatedBitmap);
+        return rotatedBitmap;
 
     }
 

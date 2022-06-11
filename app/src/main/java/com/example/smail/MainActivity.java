@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
                     case 2:
                         bottomNavigationView.getMenu().findItem(R.id.tab3).setChecked(true);
                         break;
+                    case 3:
+                        bottomNavigationView.getMenu().findItem(R.id.tab4).setChecked(true);
                 }
 
             }
@@ -73,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.tab3:
                         viewPager.setCurrentItem(2);
+                        break;
+                    case R.id.tab4:
+                        viewPager.setCurrentItem(3);
                         break;
                 }
                 return true;

@@ -4,8 +4,8 @@
 4
 5    <uses-sdk
 6        android:minSdkVersion="21"
-6-->C:\Users\kim hyun ok\AndroidStudioProjects\SMAIL\opencv\java\AndroidManifest.xml
+6-->C:\Users\yeonb\Desktop\smail\opencv\java\AndroidManifest.xml
 7        android:targetSdkVersion="30" />
-7-->C:\Users\kim hyun ok\AndroidStudioProjects\SMAIL\opencv\java\AndroidManifest.xml
+7-->C:\Users\yeonb\Desktop\smail\opencv\java\AndroidManifest.xml
 8
 9</manifest>

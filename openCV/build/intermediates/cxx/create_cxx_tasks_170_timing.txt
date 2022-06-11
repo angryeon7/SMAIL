@@ -1,46 +1,37 @@
 # C/C++ build system timings
 create_cxx_tasks
   create-initial-cxx-model
-    create-module-model 20ms
-    create-variant-model 10ms
-    create-ARM64_V8A-model 10ms
-    [gap of 17ms]
-    create-module-model 22ms
-    create-variant-model 10ms
-    create-ARMEABI_V7A-model 11ms
-    create-ARM64_V8A-model 11ms
-    create-X86-model 10ms
-    create-X86_64-model 10ms
-  create-initial-cxx-model completed in 150ms
-create_cxx_tasks completed in 152ms
+    create-module-model 11ms
+    [gap of 28ms]
+    create-module-model 10ms
+    [gap of 24ms]
+  create-initial-cxx-model completed in 73ms
+create_cxx_tasks completed in 74ms
+
+# C/C++ build system timings
+create_cxx_tasks
+  create-initial-cxx-model
+    create-module-model 14ms
+    [gap of 32ms]
+    create-module-model 10ms
+    [gap of 34ms]
+  create-initial-cxx-model completed in 90ms
+create_cxx_tasks completed in 94ms
 
 # C/C++ build system timings
 create_cxx_tasks
   create-initial-cxx-model
     create-module-model
+      create-cmake-model 21ms
+    create-module-model completed in 32ms
+    create-module-model
       [gap of 11ms]
       create-cmake-model 13ms
-    create-module-model completed in 31ms
-    create-variant-model 11ms
-    create-ARMEABI_V7A-model 20ms
-    create-ARM64_V8A-model 11ms
-    create-X86-model 11ms
-    create-X86_64-model 11ms
-    create-module-model 22ms
-    create-ARMEABI_V7A-model 12ms
+    create-module-model completed in 28ms
+    create-variant-model 38ms
     create-ARM64_V8A-model 12ms
-    create-X86-model 11ms
-    create-X86_64-model 10ms
-  create-initial-cxx-model completed in 187ms
-create_cxx_tasks completed in 192ms
-
-# C/C++ build system timings
-create_cxx_tasks
-  create-initial-cxx-model
-    create-module-model 19ms
-    [gap of 40ms]
-    create-module-model 15ms
-    [gap of 32ms]
-  create-initial-cxx-model completed in 106ms
-create_cxx_tasks completed in 109ms
+    create-X86-model 15ms
+    create-X86_64-model 23ms
+  create-initial-cxx-model completed in 203ms
+create_cxx_tasks completed in 205ms
 

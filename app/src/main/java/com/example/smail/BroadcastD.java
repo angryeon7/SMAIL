@@ -28,11 +28,9 @@ public class BroadcastD extends BroadcastReceiver  {
     private static String CHANNEL_ID = "channel1";
     private static String CHANNEL_NAME = "Channel1";
 
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-
-
 
         builder = null;
         manager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -51,6 +49,7 @@ public class BroadcastD extends BroadcastReceiver  {
 
         //알림창 제목
         builder.setContentTitle("From. 김서연");
+
         //알림창 아이콘
         builder.setContentText("ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ");
         builder.setSmallIcon(R.mipmap.ic_launcher);

@@ -85,7 +85,7 @@ public class PushAlarm extends Fragment {
             }
         });
 
-        calendar.set(mYear,mMonth,mDay,mHour,mMinute);
+        calendar.set(mYear,mMonth,mDay,mHour,mMinute,0);
          btn_alarm = (Button) view.findViewById(R.id.alarm_button);
          btn_alarm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,12 +128,18 @@ public class PushAlarm extends Fragment {
         NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 
 
+        System.out.println(title);
+        System.out.println(msg);
         AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(getActivity(), BroadcastD.class);
-        PendingIntent sender = PendingIntent.getBroadcast(getActivity(),0,intent,0);
+        intent.putExtra("title",title);
+        intent.putExtra("msg",msg);
+        PendingIntent sender = PendingIntent.getBroadcast(getActivity(),(int)System.currentTimeMillis(),intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
         Toast.makeText(getActivity(),calendar.getTime().toString(), Toast.LENGTH_SHORT).show();
         am.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),sender);
+
 
 //        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 //            String channelName = "Channel Name";
@@ -187,7 +193,7 @@ public class PushAlarm extends Fragment {
             case DATE_DIALOG_ID:
                 return new DatePickerDialog(getActivity(),mDateSetListner,mYear,mMonth,mDay);
             case TIME_DIALOG_ID:
-                return new TimePickerDialog(getActivity(),mTimeSetListner,mHour,mMinute,false);
+                return new TimePickerDialog(getActivity(), android.R.style.Theme_Holo_Light_Dialog,mTimeSetListner,mHour,mMinute,false);
         }
       return null;
     }

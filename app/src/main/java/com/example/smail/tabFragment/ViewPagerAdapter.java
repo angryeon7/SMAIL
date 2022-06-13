@@ -23,6 +23,8 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
                 return new calender();
             case 2:
                 return new CameraFragment();
+            case 3:
+                return new PushAlarm();
             default:
                 return new HomeTab();
         }
@@ -30,6 +32,6 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 }

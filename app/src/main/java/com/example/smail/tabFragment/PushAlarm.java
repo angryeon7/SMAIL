@@ -29,10 +29,12 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.smail.AlarmModel;
 import com.example.smail.BroadcastD;
 import com.example.smail.R;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Calendar;
@@ -42,6 +44,7 @@ import java.util.GregorianCalendar;
 public class PushAlarm extends Fragment {
 
 
+    //FirebaseDatabase database = FirebaseDatabase.getInstance();
     EditText sender__;
     EditText msg__;
     private Button btn_date;
@@ -127,6 +130,11 @@ public class PushAlarm extends Fragment {
         System.out.println(calendar.getTime());
         NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 
+//        AlarmModel alarmModel = new AlarmModel();
+//        alarmModel.title = title;
+//        alarmModel.msg = msg;
+//        alarmModel.time = calendar.getTime().toString();
+//        database.getReference().child("Alarm").push().setValue(alarmModel);
 
         System.out.println(title);
         System.out.println(msg);

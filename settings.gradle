@@ -5,13 +5,18 @@ pluginManagement {
         mavenCentral()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
+        //maven {url 'https://jitpack.io'}
     }
+
 }
+
+
 rootProject.name = "SMAIL"
 include ':app'
 
@@ -19,3 +24,4 @@ include ':java'
 include ':opencv'
 
 include ':oepncv'
+

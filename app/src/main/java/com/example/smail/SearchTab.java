@@ -1,6 +1,7 @@
 package com.example.smail;
 
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -31,6 +32,23 @@ public class SearchTab extends AppCompatActivity {
         ref = FirebaseDatabase.getInstance().getReference().child("Profile");
         recyclerView = findViewById(R.id.rv);
         searchView = findViewById(R.id.searchView);
+
+//        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+//            @Override
+//            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+//                return false;
+//            }
+//
+//            @Override
+//            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+//
+//            }
+//
+//            @Override
+//            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+//
+//            }
+//        });
     }
 
     @Override

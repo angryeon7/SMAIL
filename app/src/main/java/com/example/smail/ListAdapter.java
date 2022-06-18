@@ -45,13 +45,13 @@ public class ListAdapter extends BaseAdapter {
         }
 
 
-        ImageView photo = convertView.findViewById(R.id.person_image);
-        TextView nameText = convertView.findViewById(R.id.person_name);
+       // ImageView photo = convertView.findViewById(R.id.person_image);
+        //TextView nameText = convertView.findViewById(R.id.person_name);
 
 
 
-        photo.setImageResource(listItem.getImage());
-        nameText.setText(listItem.getName());
+       // photo.setImageResource(listItem.getImage());
+       // nameText.setText(listItem.getName());
 
         return convertView;
 

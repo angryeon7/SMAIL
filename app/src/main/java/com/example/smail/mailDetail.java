@@ -19,7 +19,6 @@ public class mailDetail extends Activity {
         // drawable에 있는 이미지를 지정합니다.
         iv.setImageResource(R.drawable.ex2);
 
-
         // 100 줄의 텍스트를 생성합니다.
         String text = "텍스트 화면";
         content.setText(text);

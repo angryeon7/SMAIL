@@ -6,28 +6,32 @@
 
     <TextView
         android:id="@+id/name_"
-        android:text="dkdkdkdk"
-        android:textSize="90px"
-        android:textColor="@color/main_Yellow"
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
         android:paddingRight="50dp"
-        android:layout_width="180dp"
-        android:layout_height="80dp"/>
+        android:text="dkdkdkdk"
+        android:textColor="@color/main_Yellow"
+        android:textSize="50px" />
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="80dp"
         android:orientation="vertical">
+<TextView
+    android:id="@+id/photo_"
+    android:layout_width="0dp"
+    android:layout_height="0dp"/>
+        <TextView
+            android:id="@+id/memo_"
+            android:layout_width="282dp"
+            android:layout_height="50dp"
+            android:text="생일 축하해" />
 
-    <TextView
-        android:id="@+id/memo_"
-        android:text="생일 축하해"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"/>
-    <TextView
-        android:id="@+id/date_"
-        android:text="date"
-        android:textStyle="bold"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"/>
+        <TextView
+            android:id="@+id/date_"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="date"
+            android:textStyle="bold" />
 </LinearLayout>
 
 </LinearLayout>

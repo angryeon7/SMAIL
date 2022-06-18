@@ -27,11 +27,43 @@ import java.util.List;
 
 public class Fragment2 extends Fragment {
     @Nullable
-
+    ListView list2view;
+    List DateList = new ArrayList<>();
+    ArrayAdapter adapter;
+    static boolean calledAlready = false;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment2,container,false);
+
+        list2view = (ListView) view.findViewById(R.id.listview_date);
+        //ListAdapter adapter = new ListAdapter();
+        adapter = new ArrayAdapter<String>(getActivity(), R.layout.fragment2_listitem, DateList);
+        list2view.setAdapter(adapter);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        database.getReference().child("Profile").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                System.out.println("파ㅇ어베이스");
+                for (DataSnapshot userSnapshot : snapshot.getChildren()){
+                    String str = userSnapshot.child("date").getValue(String.class);
+                    Log.i("TAG: value is",str);
+
+                    DateList.add(str);
+                }
+
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("TAG: ", "Failed to read value", error.toException());
+                System.out.println("파ㅇ어베이스 실패");
+            }
+        });
 
 
         /*listview = (ListView) view.findViewById(R.id.listview_date);

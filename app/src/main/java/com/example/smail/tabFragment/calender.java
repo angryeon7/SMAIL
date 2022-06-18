@@ -83,7 +83,7 @@ public class calender extends Fragment {
         calendarView=view.findViewById(R.id.calendarView);
         diaryTextView=view.findViewById(R.id.diaryTextView);
         save_Btn=view.findViewById(R.id.save_Btn);
-        del_Btn=view.findViewById(R.id.del_Btn);
+      //  del_Btn=view.findViewById(R.id.del_Btn);
         cha_Btn=view.findViewById(R.id.cha_Btn);
         textView2=view.findViewById(R.id.textView2);
         //textView3=view.findViewById(R.id.textView3);
@@ -101,8 +101,8 @@ public class calender extends Fragment {
                 contextEditText.setVisibility(View.VISIBLE);
                 textView2.setVisibility(View.INVISIBLE);
                 cha_Btn.setVisibility(View.INVISIBLE);
-                del_Btn.setVisibility(View.INVISIBLE);
-                diaryTextView.setText(String.format("%d / %d / %d",date.getYear(),date.getMonth()+1,date.getDay()));
+               // del_Btn.setVisibility(View.INVISIBLE);
+                diaryTextView.setText(String.format("%d - %d - %d",date.getYear(),date.getMonth()+1,date.getDay()));
                 contextEditText.setText("");
                 checkDay(date.getYear(),date.getMonth(),date.getDay());
             }
@@ -115,7 +115,7 @@ public class calender extends Fragment {
                 textView2.setText(str);
                 save_Btn.setVisibility(View.INVISIBLE);
                 cha_Btn.setVisibility(View.VISIBLE);
-                del_Btn.setVisibility(View.VISIBLE);
+                //del_Btn.setVisibility(View.VISIBLE);
                 contextEditText.setVisibility(View.INVISIBLE);
                 textView2.setVisibility(View.VISIBLE);
 
@@ -178,7 +178,7 @@ public class calender extends Fragment {
 
             save_Btn.setVisibility(View.INVISIBLE);
             cha_Btn.setVisibility(View.VISIBLE);
-            del_Btn.setVisibility(View.VISIBLE);
+          //  del_Btn.setVisibility(View.VISIBLE);
 
             cha_Btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -189,29 +189,29 @@ public class calender extends Fragment {
 
                     save_Btn.setVisibility(View.VISIBLE);
                     cha_Btn.setVisibility(View.INVISIBLE);
-                    del_Btn.setVisibility(View.INVISIBLE);
+                    //del_Btn.setVisibility(View.INVISIBLE);
                     textView2.setText(contextEditText.getText());
                 }
 
             });
-            del_Btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    textView2.setVisibility(View.INVISIBLE);
-                    contextEditText.setText("");
-                    contextEditText.setVisibility(View.VISIBLE);
-                    save_Btn.setVisibility(View.VISIBLE);
-                    cha_Btn.setVisibility(View.INVISIBLE);
-                    del_Btn.setVisibility(View.INVISIBLE);
-                    removeDiary(fname);
-                }
-            });
+//            del_Btn.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    textView2.setVisibility(View.INVISIBLE);
+//                    contextEditText.setText("");
+//                    contextEditText.setVisibility(View.VISIBLE);
+//                    save_Btn.setVisibility(View.VISIBLE);
+//                    cha_Btn.setVisibility(View.INVISIBLE);
+//                    del_Btn.setVisibility(View.INVISIBLE);
+//                    removeDiary(fname);
+//                }
+//            });
             if(textView2.getText()==null){
                 textView2.setVisibility(View.INVISIBLE);
                 diaryTextView.setVisibility(View.VISIBLE);
                 save_Btn.setVisibility(View.VISIBLE);
                 cha_Btn.setVisibility(View.INVISIBLE);
-                del_Btn.setVisibility(View.INVISIBLE);
+                //del_Btn.setVisibility(View.INVISIBLE);
                 contextEditText.setVisibility(View.VISIBLE);
             }
 

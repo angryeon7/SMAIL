@@ -1,30 +1,37 @@
 package com.example.smail.Home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.smail.R;
+import com.example.smail.mailDetail;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 public class Fragment1 extends Fragment {
     @Nullable
     ListView listview;
-    List userList = new ArrayList<>();
+    ArrayList<String> userList = new ArrayList<>();
+    ArrayList<String> userList_result = new ArrayList<>();
     ArrayAdapter adapter;
     static boolean calledAlready = false;
     /*@Override*/
@@ -42,10 +49,11 @@ public class Fragment1 extends Fragment {
         }*/
         listview = (ListView) view.findViewById(R.id.listview);
         //ListAdapter adapter = new ListAdapter();
-        adapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_person, userList);
+        adapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_person, userList_result);
         listview.setAdapter(adapter);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
+
 
         database.getReference().child("Profile").addValueEventListener(new ValueEventListener() {
             @Override
@@ -54,13 +62,19 @@ public class Fragment1 extends Fragment {
                 for (DataSnapshot userSnapshot : snapshot.getChildren()){
                     String str = userSnapshot.child("sender").getValue(String.class);
                     Log.i("TAG: value is",str);
-
                     userList.add(str);
+
+                    for(String item : userList){
+                        if(!userList_result.contains(item))
+                            userList_result.add(item);
+                    }
+
                 }
 
                 adapter.notifyDataSetChanged();
 
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -69,20 +83,19 @@ public class Fragment1 extends Fragment {
             }
         });
 
-/*        listview = (ListView) view.findViewById(R.id.listview);
-        ListAdapter adapter = new ListAdapter();
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"김서희"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"발신자 입력"));*/
-   /*     adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"김일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"김일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"나일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"다일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"김일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"나일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"다일이"));*/
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-       /* listview.setAdapter(adapter);*/
+                Intent intent = new Intent(getActivity(), List_by_Person.class);
+               //Object sValue = userList_result.get(position)
+                //String selectedItem = (String) view.findViewById(R.id.tv_item).getTag().toString();
+                //Toast.makeText(getContext(), "Clicked: " + position +" " + selectedItem, Toast.LENGTH_SHORT).show();
+                intent.putExtra("person",userList_result.get(position));
+                startActivity(intent);
+            }
+        });
 
 
         return view;

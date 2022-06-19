@@ -1,10 +1,12 @@
 package com.example.smail.Home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -12,23 +14,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.smail.ListAdapter;
-import com.example.smail.Listitem_Person;
 import com.example.smail.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.security.cert.PolicyNode;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Fragment2 extends Fragment {
     @Nullable
     ListView list2view;
-    List DateList = new ArrayList<>();
+    ArrayList<String> DateList = new ArrayList<>();
+    ArrayList<String> DateList_result = new ArrayList<>();
     ArrayAdapter adapter;
     static boolean calledAlready = false;
 
@@ -38,7 +36,7 @@ public class Fragment2 extends Fragment {
 
         list2view = (ListView) view.findViewById(R.id.listview_date);
         //ListAdapter adapter = new ListAdapter();
-        adapter = new ArrayAdapter<String>(getActivity(), R.layout.fragment2_listitem, DateList);
+        adapter = new ArrayAdapter<String>(getActivity(), R.layout.fragment2_listitem, DateList_result);
         list2view.setAdapter(adapter);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -52,6 +50,11 @@ public class Fragment2 extends Fragment {
                     Log.i("TAG: value is",str);
 
                     DateList.add(str);
+
+                    for(String item : DateList){
+                        if(!DateList_result.contains(item))
+                            DateList_result.add(item);
+                    }
                 }
 
                 adapter.notifyDataSetChanged();
@@ -65,17 +68,20 @@ public class Fragment2 extends Fragment {
             }
         });
 
+        list2view.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
-        /*listview = (ListView) view.findViewById(R.id.listview_date);
-        ListAdapter adapter = new ListAdapter();
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"김일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"김일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"김일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"나일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"다일이"));
+                Intent intent = new Intent(getActivity(), List_by_Date.class);
+                //Object sValue = userList_result.get(position)
+                //String selectedItem = (String) view.findViewById(R.id.tv_item).getTag().toString();
+                //Toast.makeText(getContext(), "Clicked: " + position +" " + selectedItem, Toast.LENGTH_SHORT).show();
+                intent.putExtra("person",DateList_result.get(position));
+                startActivity(intent);
+            }
+        });
 
-        listview.setAdapter(adapter);*/
 
 
         return view;

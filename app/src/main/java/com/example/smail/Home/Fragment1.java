@@ -1,18 +1,22 @@
 package com.example.smail.Home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.smail.R;
+import com.example.smail.mailDetail;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -26,8 +30,8 @@ import java.util.List;
 public class Fragment1 extends Fragment {
     @Nullable
     ListView listview;
-    List userList = new ArrayList<>();
-    List userList_result = new ArrayList<>();
+    ArrayList<String> userList = new ArrayList<>();
+    ArrayList<String> userList_result = new ArrayList<>();
     ArrayAdapter adapter;
     static boolean calledAlready = false;
     /*@Override*/
@@ -50,6 +54,7 @@ public class Fragment1 extends Fragment {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
+
         database.getReference().child("Profile").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -57,10 +62,9 @@ public class Fragment1 extends Fragment {
                 for (DataSnapshot userSnapshot : snapshot.getChildren()){
                     String str = userSnapshot.child("sender").getValue(String.class);
                     Log.i("TAG: value is",str);
-
                     userList.add(str);
 
-                    for(Object item : userList){
+                    for(String item : userList){
                         if(!userList_result.contains(item))
                             userList_result.add(item);
                     }
@@ -71,10 +75,25 @@ public class Fragment1 extends Fragment {
 
             }
 
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.w("TAG: ", "Failed to read value", error.toException());
                 System.out.println("파ㅇ어베이스 실패");
+            }
+        });
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+                Intent intent = new Intent(getActivity(), List_by_Person.class);
+               //Object sValue = userList_result.get(position)
+                //String selectedItem = (String) view.findViewById(R.id.tv_item).getTag().toString();
+                //Toast.makeText(getContext(), "Clicked: " + position +" " + selectedItem, Toast.LENGTH_SHORT).show();
+                intent.putExtra("person",userList_result.get(position));
+                startActivity(intent);
             }
         });
 

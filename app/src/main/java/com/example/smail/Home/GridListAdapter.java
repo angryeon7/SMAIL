@@ -1,5 +1,6 @@
 package com.example.smail.Home;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.smail.Model;
 import com.example.smail.R;
+import com.example.smail.SearchMailDetail;
 import com.example.smail.mailDetail;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -77,13 +79,16 @@ public class GridListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return new ViewHolder(imageView);
     }
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-//        holder.nameText.setText(modelList.get(position).sender);
-//        holder.memoText.setText(modelList.get(position).description);
-//        holder.dateText.setText(modelList.get(position).date);*/
+  /*     holder.nameText.setText(modelList.get(position).sender);
+       holder.memoText.setText(modelList.get(position).description);*/
+      // holder.dateText.setText(modelList.get(position).date);
 
         context = holder.itemView.getContext();
+        String date = modelList.get(position).date;
+        String name = modelList.get(position).sender;
+        String memo = modelList.get(position).description;
         String url = modelList.get(position).imageUrl;
         System.out.println(url);
         Glide.with(holder.itemView.getContext())
@@ -91,31 +96,20 @@ public class GridListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 .placeholder(R.drawable.image_ex)
                 .into((ImageView) holder.itemView);
         //holder.nameText.setText(modelList.get(position).getImageUrl());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //System.out.println("tbqlenqk" +holder.image_.getText().toString());
+                Intent intent = new Intent(holder.itemView.getContext(), mailDetail.class);
+                intent.putExtra("image",modelList.get(position).imageUrl);
+               intent.putExtra("letter",modelList.get(position).description);
+                holder.itemView.getContext().startActivity(intent);
+
+                //ContextCompat.startActivity(holder.itemView.getContext(),intent,null);
+            }
+        });
     }
 
-/*    public void onBindViewHolder(final ViewHolder holder, final int position)
-    {
-
-    }*/
-
-/*    public void addItem(Model item){
-        modelList.add(item);
-    }*/
-
-  /*  @Override
-    public int getCount() {
-        return modelList.size();
-    }*/
-
-   /* @Override
-    public Object getItem(int position) {
-        return modelList.get(position);
-    }
-*/
-   /* @Override
-    public long getItemId(int position) {
-        return position;
-    }*/
 
     @Override
     public int getItemCount() {
@@ -123,65 +117,20 @@ public class GridListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return modelList.size();
     }
 
-/*    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        context = parent.getContext();
-        Model model = modelList.get(position);
-
-        if(convertView == null){
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.list_item,parent,false);
-
-        }
-
-
-        ImageView photo = convertView.findViewById(R.id.photo);
-        TextView nameText = convertView.findViewById(R.id.name);
-        TextView memoText = convertView.findViewById(R.id.memo);
-        TextView dateText = convertView.findViewById(R.id.date);
-
-
-        photo.setImageResource(Model.get(position),getDate());
-        nameText.setText(Model.date());
-        memoText.setText(Model.getMemo());
-        dateText.setText(Model.date());
-
-
-        return convertView;
-
-
-    }*/
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-       // public TextView nameText;
-       // public TextView memoText;
-       // public TextView dateText;
-        //public ImageView photo;
+        TextView nameText;
+        TextView memoText;
+        TextView dateText;
         public  ImageView imageView;
 
         public ViewHolder(@NonNull ImageView imageView){
             super(imageView);
             this.imageView = imageView;
-            //photo = itemView.findViewById(R.id.photo);
-            //nameText = itemView.findViewById(R.id.name);
-            //memoText = itemView.findViewById(R.id.memo);
-            //dateText = itemView.findViewById(R.id.date);
-            imageView.setClickable(true);
-            imageView.setOnClickListener(new View.OnClickListener(){
-
-                @Override
-                public void onClick(View view) {
-                    int pos = getAdapterPosition();
-                    if(pos != RecyclerView.NO_POSITION){
-                        Intent intent = new Intent(
-                                context.getApplicationContext(), // 현재화면의 제어권자
-                                mailDetail.class);
-
-                        context.startActivity(intent);
-                    }
-
-                }
-            });
+           // photo = itemView.findViewById(R.id.photo);
+            nameText = itemView.findViewById(R.id.name);
+            memoText = itemView.findViewById(R.id.memo);
+            dateText = itemView.findViewById(R.id.date);
 
         }
 

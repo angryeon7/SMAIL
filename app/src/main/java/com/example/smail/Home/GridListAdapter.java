@@ -80,10 +80,7 @@ public class GridListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
-
-  /*     holder.nameText.setText(modelList.get(position).sender);
-       holder.memoText.setText(modelList.get(position).description);*/
-      // holder.dateText.setText(modelList.get(position).date);
+        
 
         context = holder.itemView.getContext();
         String date = modelList.get(position).date;

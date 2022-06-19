@@ -29,6 +29,7 @@ public class Fragment2 extends Fragment {
     @Nullable
     ListView list2view;
     List DateList = new ArrayList<>();
+    List DateList_result = new ArrayList<>();
     ArrayAdapter adapter;
     static boolean calledAlready = false;
 
@@ -38,7 +39,7 @@ public class Fragment2 extends Fragment {
 
         list2view = (ListView) view.findViewById(R.id.listview_date);
         //ListAdapter adapter = new ListAdapter();
-        adapter = new ArrayAdapter<String>(getActivity(), R.layout.fragment2_listitem, DateList);
+        adapter = new ArrayAdapter<String>(getActivity(), R.layout.fragment2_listitem, DateList_result);
         list2view.setAdapter(adapter);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -52,6 +53,11 @@ public class Fragment2 extends Fragment {
                     Log.i("TAG: value is",str);
 
                     DateList.add(str);
+
+                    for(Object item : DateList){
+                        if(!DateList_result.contains(item))
+                            DateList_result.add(item);
+                    }
                 }
 
                 adapter.notifyDataSetChanged();
@@ -64,18 +70,6 @@ public class Fragment2 extends Fragment {
                 System.out.println("파ㅇ어베이스 실패");
             }
         });
-
-
-        /*listview = (ListView) view.findViewById(R.id.listview_date);
-        ListAdapter adapter = new ListAdapter();
-
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"김일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"김일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"김일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"나일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"다일이"));
-
-        listview.setAdapter(adapter);*/
 
 
         return view;

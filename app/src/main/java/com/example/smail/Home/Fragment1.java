@@ -19,12 +19,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 public class Fragment1 extends Fragment {
     @Nullable
     ListView listview;
     List userList = new ArrayList<>();
+    List userList_result = new ArrayList<>();
     ArrayAdapter adapter;
     static boolean calledAlready = false;
     /*@Override*/
@@ -42,7 +45,7 @@ public class Fragment1 extends Fragment {
         }*/
         listview = (ListView) view.findViewById(R.id.listview);
         //ListAdapter adapter = new ListAdapter();
-        adapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_person, userList);
+        adapter = new ArrayAdapter<String>(getActivity(), R.layout.list_item_person, userList_result);
         listview.setAdapter(adapter);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -56,6 +59,12 @@ public class Fragment1 extends Fragment {
                     Log.i("TAG: value is",str);
 
                     userList.add(str);
+
+                    for(Object item : userList){
+                        if(!userList_result.contains(item))
+                            userList_result.add(item);
+                    }
+
                 }
 
                 adapter.notifyDataSetChanged();
@@ -68,21 +77,6 @@ public class Fragment1 extends Fragment {
                 System.out.println("파ㅇ어베이스 실패");
             }
         });
-
-/*        listview = (ListView) view.findViewById(R.id.listview);
-        ListAdapter adapter = new ListAdapter();
-
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"김서희"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"발신자 입력"));*/
-   /*     adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"김일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"김일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"나일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"다일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"김일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"나일이"));
-        adapter.addItem(new Listitem_Person(R.drawable.ic_launcher_foreground,"다일이"));*/
-
-       /* listview.setAdapter(adapter);*/
 
 
         return view;

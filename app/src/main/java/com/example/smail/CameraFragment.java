@@ -103,6 +103,7 @@ public class CameraFragment extends Fragment {
     EditText textView;// 인식된 본문
     EditText today_date;//오늘 날짜
     EditText writer_;//writer 인식하고 default 발신자
+    TextView subtextView;
     Uri uri;
     private String imageUrl="";
     double rotate_=0f;
@@ -126,6 +127,7 @@ public class CameraFragment extends Fragment {
         bt_save.setOnClickListener(saveClick);
 
         imageView = (ImageView) view.findViewById(R.id.iv_photo);
+        subtextView = (TextView) view.findViewById(R.id.text_sub);
 
         textView = (EditText) view.findViewById(R.id.ocr_text);
         today_date = (EditText) view.findViewById(R.id.today_date);
@@ -293,7 +295,7 @@ public class CameraFragment extends Fragment {
                         uploadFile(fileUrl);
 
                         imageView.setImageURI(fileUrl);
-
+                        subtextView.setVisibility(View.GONE);
                     }
                 }
                 break;
@@ -339,6 +341,8 @@ public class CameraFragment extends Fragment {
                                 rotatedBitmap = bitmap;
                         }
                         imageView.setImageBitmap(rotatedBitmap);
+                        subtextView.setVisibility(View.GONE);
+
 
                     }
 

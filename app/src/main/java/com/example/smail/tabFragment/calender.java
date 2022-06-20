@@ -102,7 +102,7 @@ public class calender extends Fragment {
                 textView2.setVisibility(View.INVISIBLE);
                 cha_Btn.setVisibility(View.INVISIBLE);
                // del_Btn.setVisibility(View.INVISIBLE);
-                diaryTextView.setText(String.format("%d - %d - %d",date.getYear(),date.getMonth()+1,date.getDay()));
+               // diaryTextView.setText(String.format("%d - %d - %d",date.getYear(),date.getMonth()+1,date.getDay()));
                 contextEditText.setText("");
                 checkDay(date.getYear(),date.getMonth(),date.getDay());
             }

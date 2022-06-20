@@ -40,7 +40,7 @@ public class CalendarTab extends DialogFragment {
         fragment = getActivity().getSupportFragmentManager().findFragmentByTag("tag");
 
         diary_content = view.findViewById(R.id.diary_content);
-        datePicker = view.findViewById(R.id.diary_datepick);
+        //datePicker = view.findViewById(R.id.diary_datepick);
         diary_saveBtn = view.findViewById(R.id.diary_save);
 
         diary_saveBtn.setOnClickListener(new View.OnClickListener() {

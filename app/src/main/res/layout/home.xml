@@ -28,14 +28,16 @@
 
     <Button
         android:id="@+id/searchIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginRight="10dp"
         android:layout_toRightOf="@+id/Logo"
-        android:background="@android:drawable/ic_menu_search" />
+        android:background="@drawable/baseline_search_20" />
 </LinearLayout>
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabs"
-        android:layout_width="409dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/Logo">
 
